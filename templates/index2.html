@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+  <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../static/window.css">
+  
+
+  <title>医院主页</title>
+
+</head>
+<body class="mbody">
+    <nav class="nav navbar bg-window fixed-top w-100 d-flex flex-row">
+      <div id="left-logo" class="w-50">
+        <img src="../static/logo.png" alt="">
+      </div>
+      <div class="w-50 d-flex flex-row-reverse" id="right-title">
+        <h3 style="color:white;font-weight: bold;" class="headline">登陆选项</h3>
+      </div>
+    </nav>
+    <div class="d-flex flex-row">
+      <div class="bg-white semi-transparent height-padding" style=" width: 60%;">
+        <div class="d-flex flex-column" > 
+          <span class="input-group-btn normal-btn-interval">
+            <a href="{{ url_for('main.main_interface') }}">
+              <button type="button" class="btn btn-primary btn-xxxl btn-word-xxxl bg-window">
+                医生工作平台
+              </button>
+            </a>
+
+          </span>
+          <span class="input-group-btn normal-btn-interval">
+            <a href="{{ url_for('main.data_events') }}">
+              <button type="button" class="btn btn-primary btn-xxxl btn-word-xxxl bg-window">检查项目后台</button>
+            </a>
+          </span>
+          <span class="input-group-btn normal-btn-interval ">
+            <a href="{{ url_for('main.be_patients') }}">
+              <button type="button" class="btn btn-primary btn-xxxl btn-word-xxxl bg-window">病人数据查询</button>
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar nav fixed-bottom bg-window" style="height: 8%;"></nav>
+</body>
+</html>

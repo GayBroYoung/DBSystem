@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.1.3-dist/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+
+
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- bootstrap select components -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    
+    <title>工作平台界面</title>
+    <style>
+        #tip-bar{
+            background: linear-gradient(rgb(20, 192, 192),#17A2B8);
+        }
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+    
+<body>
+
+    <div id = "app" v-cloak>
+        <div class="d-flex p-0 m-0 flex-row">
+            <div style="width: 20%;">
+                <nav class="navbar d-flex flex-column navbar-expand-sm bg-info">
+                    <h7 class="navbar-text" style="color: white;">选择病人</h7>
+                    <form class="form-inline">
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="" v-model="search_content" placeholder="请输入病人号" aria-label="Recipient's " aria-describedby="my-addon">
+                            <div class="input-group-append">
+                                <a :href="'#sjid' + search_content">
+                                    <input type="button" class="btn btn-dark" value="搜索">
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </nav>
+                <div id="left-silde" style="height:600px; overflow-y: scroll;">
+                    <table class="table table-striped table-sm table-hover">
+                        <tbody>
+                            <tr v-for="(item, index) in patients" :key="index"
+                                :style="'background-color:'+ (parseInt(search_content) == item.subject_id?'yellow':'') +';'">
+                                <td>
+                                    <td :id="'sjid'+ item.subject_id ">病人号:
+                                        ${item.subject_id}
+                                    </td>
+                                </td>
+                            </tr>
+                                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id = "layout" class="d-flex flex-column" style="width: 80%;">
+                <nav id = "tip-bar" class="nav navbar w-100" style="display:flex;justify-content:flex-end;">
+                    <h6 style="color:white;padding-right:10px;padding-top: 10px;">欢迎您 {{ user.name }} 医生</h6>
+                    <button class="btn btn-light btn-sm">
+                        <a href="{{ url_for('main.logout')}}" style="color:black">登出</a>
+                    </button>
+                </nav>
+                <div id="info">
+                    <nav class="navbar bg-info navbar-dark navbar-expand-sm">
+                        <div style="width: 50%;">
+                            <h7 style="color:white;">病人信息</h7>
+                        </div>
+                    </nav>
+                    <div>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>distchtime</th>
+                                    <th>type</th>
+                                    <th>gender</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ admission.admittime }}</td>
+                                    <td>{{ admission.admission_type }}</td>
+                                    <td>{{ select.gender }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="item_res" >
+                    <nav class="navbar bg-info navbar-dark navbar-expand-sm">
+                        <div style="width: 50%;">
+                            <h7 style="color:white;">检查指标</h7>
+                        </div>
+                        <div style="width:50%;display: flex; justify-content:flex-end;">
+                            <button class="btn btn-light btn-sm  mr-1 ml-1" @click="print_abnormal_only = !print_abnormal_only">
+                                <div v-if="print_abnormal_only">查看全部指标</div>
+                                <div v-else>查看异常指标</div>
+                            </button>
+                        </div>
+                    </nav>
+                    <div style="height:200px;overflow: auto;">
+                        <table class="table table-bordered table-sm table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>item_label</th>
+                                    <th>value</th>
+                                    <th>valueomn</th>
+                                    <th>is abnormal</th>
+                                    <th>charttime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for content in select.labs %}
+                                    <tr v-show=" (!print_abnormal_only) || '{{content.flag}}' == 'abnormal' ">
+                                        {% if not content.dod %}
+                                            <td>{{ content.d_labs.label}}</td>
+                                            <td>{{ content.valuenum }}</td>
+                                            <td>{{ content.valueuom }}</td>
+                                            <td v-if="'{{content.flag}}' == 'abnormal'">
+                                                <span style="color:red;">
+                                                    {{ content.flag }}
+                                                </span></td>
+                                            <td v-else>{{ content.flag }}</td>
+                                            <td>{{ content.charttime }}</td> 
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                          </table>  
+                    </div>
+                   
+                </div>
+                <div class="prescriptions">
+                    <nav class="navbar bg-info navbar-dark navbar-expand-sm">
+                        <div style="width: 50%;">
+                            <h7 style="color:white;">处方</h7>
+                        </div>
+                        <div style="width:50%;display: flex; justify-content:flex-end;">
+                            <button class="btn btn-light btn-sm  mr-1 ml-1" data-toggle="modal" data-target="#myModal">
+                                插入新处方
+                            </button>
+                            <button @click="post_presc"class="btn btn-primary btn-sm  mr-1 ml-1">
+                                提交处方
+                            </button>
+                        </div>
+ 
+                    </nav>
+                    <div class="w-100 " style="height:200px;overflow:auto;">
+
+                        <table class=" table table-sm table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>drug name</th>
+                                    <th>amount</th>
+                                    <th>start time</th>
+                                    <th>end time</th>
+                                    <th>route</th>
+                                    <th>操作</th>
+                                </tr>
+    
+                            </thead>
+                            <tbody>
+                                <tr v-for="(i, index) in presc" :key="index">
+                                    <td>${i.drug}</td>
+                                    <td>${i.val_rx}</td>
+                                    <td>${i.startdate}</td>
+                                    <td>${i.enddate}</td>
+                                    <td>${i.route}</td>
+                                    <!-- <td>${i.dose_val_rx} ${i.dose_until_rx}</td>
+                                    <td>${i.form_val_disp} ${i.form_unit_disp}</td>
+                                    <td>${i.startdate}</td>
+                                    <td>${i.enddate}</td>
+                                    <td>${i.route}</td>-->
+                                    <td> 
+                                        <button class="btn btn-danger btn-sm  mr-1 ml-1" @click="delete_presc(index)">
+                                            删除
+                                        </button>
+                                    </td>
+                                </tr>   
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+    
+            </div>
+        </div>    
+        
+        <!-- 模态框（Modal） -->
+        <div class="modal fade w-8 pt-5 " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div id="left-padding-title">
+                            编辑处方
+                        </div>
+                        <button type="button" class="close" :data-dismiss="'modal'" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                            <div class="input-group mr-5 p-1">
+                                <div class="form-inline">
+                                    选择药物
+                                    <select class="selectpicker ml-2" data-live-search="true" v-model="tmp_record.drug">
+                                        {% for item in drug_name_list %}
+                                            <option id="'{{item}}'"> {{ item }} </option>
+                                        {% endfor %}
+                                            
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="input-group mr-5 p-1">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text" id="my-addon">startdate</span>
+                                </div>
+                                <input type="date" v-model="tmp_record.startdate" class="form-control typeahea__query mr-2" type="text" name="" placeholder="开始时间">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="my-addon">enddate</span>
+                                </div>
+                                <input type="date"  v-model="tmp_record.enddate" class="form-control" type="text"pre name="" placeholder="结束时间">
+                            </div>
+                            <div class="input-group mr-5 p-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="my-addon">用量</span>
+                                </div>
+                                <input v-model="tmp_record.dose_val_rx" class="form-control typeahea__query mr-2" type="text" name="" placeholder="用量">
+                                <input v-model="tmp_record.dose_unit_rx" class="form-control typeahea__query mr-2" type="text" name="" placeholder="单位">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="my-addon">route</span>
+                                </div>
+                                <input v-model="tmp_record.route"  class="form-control" type="text"pre name="" placeholder="route" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="button"
+                        class="btn btn-primary" data-dismiss="modal" aria-hidden="true" @click="add_prescription('{{select.subject_id}}')">
+                            提交更改
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+    <script>
+        var res = new Vue({
+            el:"#app",
+            
+            data() {
+                return {
+                    tmp_record : {
+                        subject_id: "",
+                        drug:null,
+                        startdate:null,
+                        enddate:null,
+                        route:null,
+                        dose_val_rx : null,
+                        dose_unit_rx : null
+                    },
+                    search_content:"",
+                    presc_valid:false,
+                    print_abnormal_only:false,
+                    drugs:{},
+                    chosen_sub_id:21,
+                    doc_name:"Colin Young",
+                    patients:null,
+                    prescriptions:null,
+                    presc:[]
+                }
+            },
+            delimiters:['${','}'],
+            created() {
+                
+            },
+            mounted() {
+                var router = "http://localhost:5000";
+                axios
+                .get('http://localhost:5000/get-pres/21')
+                .then(response => (this.prescriptions = response.data))
+                .catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+                axios.get('http://localhost:5000/json')
+                .then(response => (this.patients = response.data))
+                .catch(function(error){
+                    console.log(error)
+                });
+
+                
+            },
+            methods: {
+                has_empty(record){
+                    for(let iter in record){
+                        if(iter == null || iter == undefined || iter == ''){
+                            return true 
+                        }
+                    }
+                    return false
+                },
+                search_patients(){},
+                add_prescription(subject_id){
+                    this.tmp_record.subject_id = parseInt(subject_id)
+                    //不允许有空白的处方内容
+                    if(has_empty(this.tmp_record))return;
+                    const record = Object.assign({},this.tmp_record)
+                    this.presc.push(record)
+                },
+                delete_presc(id){
+                    this.presc.splice(id,1)
+                    console.log(id)
+                },
+                post_presc(){
+                    axios.post('http://localhost:5000/add-presc', {
+                        "data":this.presc
+                    })
+                    .then(function (response) {
+                        console.log(response);
+                        alert("成功提交");
+                        this.presc = []
+                        
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                    this.presc = []
+                },
+            },
+        })
+
+    </script>
+</body>
+</html>

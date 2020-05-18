@@ -1,0 +1,39 @@
+.mbody 
+{
+  background-image:url('bg.jpg');
+  background-color:white;
+  background-size: 100%;
+  background-repeat:space;
+  margin: 0px;
+  padding: 0px;
+}
+.bg-window{
+  background:#0D2E4E;
+}
+.headline{
+  font-family: Arial, Helvetica, sans-serif;
+}
+.semi-transparent{
+  opacity: 85%;
+}
+.height-padding{
+  position: absolute;
+  top:0;
+  left: 0;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+}
+.normal-btn-interval{
+  margin: 10px 0; 
+}
+.btn-xxxl{
+  width: 300px;
+  height: 60px;;
+}
+.btn-word-xxxl{
+  font-size: x-large;
+  font-weight: bold;
+}

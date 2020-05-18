@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册页面</title>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+    <style>
+        .centerize{
+            display: flex;
+            justify-content: center;
+            justify-items: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar nav bg-info">
+        <div style="color:white;font-size: large;">
+            注册页面
+        </div>
+        
+        <div>
+            <span style="color:white;">已有帐号？</span>
+            <a href="{{ url_for('main.login') }}">
+                <button class="btn btn-light btn-sm  mb-1 pl-3 pr-3">
+                    去登陆
+                </button>
+            </a>
+        </div>
+
+    </nav>
+    <div class="centerize">
+        <form method="post">
+            <div class="border shadow p-4" style="border-radius: 10px;; margin: 20px 0; width:300px;justify-content: center;display:flex;flex-direction: column;">
+                <div>
+                    Email <input type="text" class="form-control " name="Email" autocomplete="off" required>
+                    name <input type="text" class="form-control" name="name" autocomplete="off" required>
+                    password <input type="password" class="form-control" name="pwd" autocomplete="off" required>
+                    confirm_password
+                    <input type="password" class="form-control" name="cfm_pwd" autocomplete="off" required>
+                </div>
+                <button type="submit" class="btn btn-info mt-3 ml-3 mr-3">注册</button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>
+

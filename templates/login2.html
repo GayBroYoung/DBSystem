@@ -1,0 +1,68 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+    
+        
+    
+    {% block title %}
+        登陆界面
+    {% endblock title %}
+        
+    {% block body%}
+        
+        <div style="background-color:#17A2B8;padding:10px;display:flex;align-content: center; justify-content: center;">
+            <div style="width: 50%; justify-content: center; align-content: center;">
+                <span style="color: white;font-size: large;">登陆界面</span>
+            </div>
+            <div style="width: 50%;display:flex;justify-content:flex-end;">
+                <a href="{{ url_for('main.doc_register') }}" class="d-flex w-50">
+                    <button class="btn btn-light  ml-3">注册</button>
+                </a>
+            </div>
+
+        </div>
+        <div id = "form_check"style="padding:80px; display:flex; justify-content: center;">
+            <form method="POST" class="form-horizontal p-3 " style="width:300px;" role="form">
+            <div>
+                {{form.csrf_token()}}
+                <div class="input-group border shadow" style="border-radius:10px;">
+                    <span class="input-group-addon">{{ form.email.label }}</span>
+                    {{ form.email(class="form-control",placeholder="请输入邮箱")}}
+                </div>
+                <br>
+                <div class="input-group">
+                    <span class="input-group-addon">{{ form.password.label }}</span>
+                    {{ form.password(class="form-control",placeholder="请输入密码")}}
+                </div>
+    
+                <div class="form-group pt-2">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> 记住我
+                            </label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      {{ form.submit(class='btn btn-info btn-lg',value='登陆') }}
+                    </div>
+                </div>
+            </div>
+            </form>
+
+        </div>
+
+        
+  
+    {% endblock %}
+        
+    
+
+
+
+
+
+    
