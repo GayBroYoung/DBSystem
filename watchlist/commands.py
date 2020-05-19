@@ -2,6 +2,8 @@ from flask import Flask
 import os
 import sys
 sys.path.append('E:/DeskTopFiles/19-20/数据库/flask_proj/')
+sys.path.append('home/ZJUBME/DBsystem')
+
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_script import Manager,Command,Shell
